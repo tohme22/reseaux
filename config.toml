@@ -1,4 +1,4 @@
-baseURL = "https://itmt-prof.com/reseaux/"
+baseURL = "https://jolly-sand-0c161d010.7.azurestaticapps.net/"
 languageCode = "fr-ca"
 DefaultContentLanguage = "fr"
 theme = "hugo-theme-learn"
@@ -12,3 +12,4 @@ disableSearch = true
 disableInlineCopyToClipBoard = true
 editURL = ""
 author = "Antoine Tohmé"
+logo = "images/logo.png"
