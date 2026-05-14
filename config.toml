@@ -1,4 +1,4 @@
-baseURL = "https://jolly-sand-0c161d010.7.azurestaticapps.net/"
+baseURL = "https://coursinfo.ca/420-5D4/reseaux/"
 languageCode = "fr-ca"
 DefaultContentLanguage = "fr"
 theme = "hugo-theme-learn"
@@ -6,10 +6,9 @@ theme = "hugo-theme-learn"
 themeVariant = "blue"
 titleSeparator = ""
 disableLandingPageButton = true
-landingPageURL = "/reseaux/"
+landingPageURL = "https://coursinfo.ca/420-5D4/reseaux/"
 landingPageName = "<i class='fas fa-home'></i> Accueil"
 disableSearch = true
 disableInlineCopyToClipBoard = true
 editURL = ""
 author = "Antoine Tohmé"
-logo = "images/logo.png"
