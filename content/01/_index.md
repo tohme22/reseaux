@@ -1,7 +1,7 @@
 ---
 title: "Adressage IPv6"
 description: "reseaux"
-draft: false
+draft: true
 weight: 1
 ---
 
