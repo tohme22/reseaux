@@ -90,107 +90,167 @@ Cette configuration met en place une infrastructure VoIP simple avec :
 - Un **Commutateur Cisco** configuré avec des VLAN séparés pour **Voix** et **Données**.  
 - Des **téléphones IP** enregistrés sur le CME avec des numéros attribués.  
 
-![](../images/image56.png?height=400&classes=inline)
+![](../images/Topology-IP-Phone.png?height=400&classes=inline)
 
 #### **1. Configuration du Routeur**
 
-#### DHCP et Interfaces
+```yaml
+conf t
+hostname R1
+
+! DHCP VLAN 20
+ip dhcp pool VLAN20
+ network 10.1.20.0 255.255.255.0
+ default-router 10.1.20.1
+ option 150 ip 10.1.10.2
+exit
+
+! DHCP VLAN 30
+ip dhcp pool VLAN30
+ network 10.1.30.0 255.255.255.0
+ default-router 10.1.30.1
+ option 150 ip 10.1.10.2
+exit
+
+! Connection to CME
+interface GigabitEthernet0/0
+ ip address 10.1.10.1 255.255.255.0
+ no shutdown
+exit
+
+! Connection to Switch
+interface GigabitEthernet0/1
+ no ip address
+ no shutdown
+exit
+
+! VLAN 20
+interface GigabitEthernet0/1.20
+ encapsulation dot1Q 20
+ ip address 10.1.20.1 255.255.255.0
+exit
+
+! VLAN 30
+interface GigabitEthernet0/1.30
+ encapsulation dot1Q 30
+ ip address 10.1.30.1 255.255.255.0
+exit
+
+end
+wr
+
+```
+
+#### **2. Configuration de CME (Communications Manager Express)**
 
 ```yaml
+conf t
 hostname CME
 
-ip dhcp pool DONNEES
- network 10.1.10.0 255.255.255.0
- default-router 10.1.10.254
-
-ip dhcp pool VOIX
- network 10.1.20.0 255.255.255.0
- default-router 10.1.20.254
- option 150 ip 10.1.20.254   # Option 150 = adresse TFTP (CME)
-exit
-
-interface FastEthernet0/0
+interface GigabitEthernet0/0
  no shutdown
-
-interface FastEthernet0/0.10
- encapsulation dot1Q 10
- ip address 10.1.10.254 255.255.255.0
-
-interface FastEthernet0/0.20
- encapsulation dot1Q 20
- ip address 10.1.20.254 255.255.255.0
+ ip address 10.1.10.2 255.255.255.0
 exit
-```
 
-#### Configuration du CME (Communications Manager Express)
+ip route 0.0.0.0 0.0.0.0 10.1.10.1
 
-```yaml
+! ==========================================
+! Configuration de Cisco CallManager Express
+! ==========================================
+!
 telephony-service
- max-ephones 2                # Nombre maximum de téléphones
- max-dn 2                     # Nombre maximum de numéros (Directory Number)
- ip source-address 10.1.20.254 port 2000   # Adresse IP et port UDP du CME pour l’enregistrement
- auto assign 1 to 6  		  # Attribuer automatiquement numéros aux téléphones quand ils se connectent
+ !
+ ! Nombre maximum de téléphones IP
+ max-ephones 2
+ !
+ ! Nombre maximum de numéros (Directory Numbers)
+ max-dn 2
+ !
+ ! Adresse IP du CME et port TCP 2000
+ ! utilisé pour l'enregistrement SCCP des téléphones
+ ip source-address 10.1.10.2 port 2000
+ !
+ ! Attribution automatique des numéros
+ ! aux téléphones lors de leur enregistrement
+ auto assign 1 to 2
 exit
-```
 
-#### Configuration de l’Annuaire téléphonique
-
-```yaml
+!
+! ==========================================
+! Configuration des numéros de téléphone
+! ==========================================
+!
+! Premier numéro : 54001
+!
 ephone-dn 1
  number 54001
+exit
 
+!
+! Deuxième numéro : 54002
+!
 ephone-dn 2
  number 54002
+exit
 
 end
-wr   # Sauvegarde de la configuration
+wr
+
 ```
 
-#### **2. Configuration du Commutateur**
+#### **3. Configuration du Commutateur**
 
 ```yaml
+conf t
 hostname S1
 
-vlan 10
- name DONNEES
-
 vlan 20
- name VOIX
+ name VLAN20
+exit
 
-interface FastEthernet0/1
+vlan 30
+ name VLAN30
+exit
+
+! Trunk to R1
+interface GigabitEthernet0/0
+ switchport trunk encapsulation dot1q
  switchport mode trunk
+ no shutdown
+exit
 
-interface FastEthernet0/2
- switchport access vlan 10
+! IP Phone 1
+interface GigabitEthernet0/1
  switchport mode access
- mls qos trust cos 	# Le switch fait confiance à la priorité (CoS) du téléphone IP pour donner la priorité au trafic voix (QoS)
- switchport voice vlan 20
+ switchport access vlan 20
+ no shutdown
+exit
 
-interface FastEthernet0/3
- switchport access vlan 10
+! IP Phone 2
+interface GigabitEthernet0/2
  switchport mode access
- mls qos trust cos
- switchport voice vlan 20
+ switchport access vlan 30
+ no shutdown
+exit
 
 end
-wr   
+wr
+
 ```
 
 #### **3. Vérification**
 
-- Branchez **l’alimentation** aux **deux téléphones** :
+- Démarez les **deux téléphones** :
 
-![](../images/image57.png?height=550&classes=inline)
+![](../images/Phone1.png?height=50&classes=inline)
 
-- Activez le **DHCP** pour les deux **PC** :
-
-![](../images/image58.png?height=300&classes=border,inline)
+![](../images/Phone2.png?height=60&classes=inline)
 
  - Attendez que **le réseau se converge**
  
-- Vérifiez que le **router (CME)** a registré les deux téléphones et a envoyé **les adresses IP** aux deux PC et deux téléphones
+- Vérifiez que le **router (CME)** a registré les deux téléphones
 
-![](../images/image59.png?height=250&classes=border,inline)
+![](../images/ephone.png?height=3000&classes=border,inline)
 
 - Essayez **d’appeler d’un téléphone à l’autre**
 
