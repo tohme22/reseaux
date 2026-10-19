@@ -247,8 +247,6 @@ wr
 
 ![](../images/Phone2.png?height=620&classes=inline)
 
- - Attendez que **le réseau se converge**
- 
 - Vérifiez que le **router (CME)** a registré les deux téléphones
 
 ![](../images/ephone.png?height=300&classes=border,inline)
