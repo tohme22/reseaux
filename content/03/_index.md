@@ -112,13 +112,13 @@ ip dhcp pool VLAN30
  option 150 ip 10.1.10.2
 exit
 
-! Connection to CME
+! Connexion au CME
 interface GigabitEthernet0/0
  ip address 10.1.10.1 255.255.255.0
  no shutdown
 exit
 
-! Connection to Switch
+! Connexion au Switch
 interface GigabitEthernet0/1
  no ip address
  no shutdown
@@ -147,6 +147,7 @@ wr
 conf t
 hostname CME
 
+! Connexion au R1
 interface GigabitEthernet0/0
  no shutdown
  ip address 10.1.10.2 255.255.255.0
@@ -212,7 +213,7 @@ vlan 30
  name VLAN30
 exit
 
-! Trunk to R1
+! Trunk au R1
 interface GigabitEthernet0/0
  switchport trunk encapsulation dot1q
  switchport mode trunk
