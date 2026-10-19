@@ -243,15 +243,15 @@ wr
 
 - Démarez les **deux téléphones** :
 
-![](../images/Phone1.png?height=50&classes=inline)
+![](../images/Phone1.png?height=300&classes=inline)
 
-![](../images/Phone2.png?height=60&classes=inline)
+![](../images/Phone2.png?height=3100&classes=inline)
 
  - Attendez que **le réseau se converge**
  
 - Vérifiez que le **router (CME)** a registré les deux téléphones
 
-![](../images/ephone.png?height=3000&classes=border,inline)
+![](../images/ephone.png?height=300&classes=border,inline)
 
 - Essayez **d’appeler d’un téléphone à l’autre**
 
