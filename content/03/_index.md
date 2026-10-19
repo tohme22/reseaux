@@ -243,9 +243,9 @@ wr
 
 - Démarez les **deux téléphones** :
 
-![](../images/Phone1.png?height=300&classes=inline)
+![](../images/Phone1.png?height=600&classes=inline)
 
-![](../images/Phone2.png?height=3100&classes=inline)
+![](../images/Phone2.png?height=620&classes=inline)
 
  - Attendez que **le réseau se converge**
  
